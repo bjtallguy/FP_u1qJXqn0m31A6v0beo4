@@ -20,12 +20,14 @@ link to the version in English.
 from selenium import webdriver
 # from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions
 
 # Test Data
 start_page = "http://www.wikipedia.org/"
 search_field_name = "search"
 search_string = "London"
+search_lang = "Deutsch"
 
 # Create a new instance of the Firefox driver.
 driver = webdriver.Firefox()
@@ -41,8 +43,12 @@ print(driver.title)
 inputElement = driver.find_element_by_name(search_field_name)
 # type in the search
 inputElement.send_keys(search_string)
+# (b) Select English as the search language.
+select = Select(driver.find_element_by_name('language'))
+select.select_by_visible_text("English")
+
 # submit the form (although google automatically searches now without submitting)
-inputElement.submit()
+driver.find_element_by_name("go").click()
 
 try:
     # we have to wait for the page to refresh, the last thing that seems to be updated is the title

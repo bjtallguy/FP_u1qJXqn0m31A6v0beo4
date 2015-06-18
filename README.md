@@ -1,6 +1,4 @@
-# FP_u1qJXqn0m31A6v0beo4
-
-_Exercise Answers_
+# Exercise Answers
 
 Q1) Developed in C# and wrapped using Visual Studio unittest framework - example test suite with a good range of cases
 
