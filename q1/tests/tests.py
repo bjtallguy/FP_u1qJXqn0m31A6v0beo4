@@ -1,6 +1,7 @@
 __author__ = 'bj'
 
 import unittest
+from timeit import Timer
 from q1 import find_longest_inc_subsequence as fls
 
 
@@ -30,8 +31,14 @@ class TestFindLongestIncrementingSubSequence(unittest.TestCase):
     def test_list_of_strings(self):
         self.assertEqual(fls(['a', 'b', 'c', 'b']), 3)
 
-    def text_speed(self):
-        pass
+    def test_speed(self):
+        """Creates million int list and times search."""
+        t = Timer("""fls(seq)""", """
+from random import randint
+from q1 import find_longest_inc_subsequence as fls
+seq = [randint(0, 100) for x in range(1000000)]
+        """)
+        self.assertLess(t.timeit(1), 2)
 
 if __name__ == '__main__':
     unittest.main()
