@@ -1,4 +1,4 @@
-__author__ = '30070_VS'
+__author__ = 'bj'
 
 """
 Q2 Web Front-End Test
