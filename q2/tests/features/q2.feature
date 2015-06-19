@@ -2,7 +2,6 @@
 
 Feature: Q2 Web Front-End Test
   Automate the following functional test using Selenium
-  Denonstrating Gherkin BDD is just a bonus
 
   Scenario Outline: Search for a given string in English and check it in another Language
      Given I am browsing "http://www.wikipedia.org/"
@@ -12,7 +11,7 @@ Feature: Q2 Web Front-End Test
       Then The first heading of the search results page matches "<search_topic>"
        And The search results page is available in "<language>"
 
-    Given The scenario has passed so far
+     Given The scenario has passed so far
       When I select language_option "<language>"
       Then The search results page is available in "English"
 
