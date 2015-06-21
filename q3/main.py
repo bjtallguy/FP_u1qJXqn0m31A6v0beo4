@@ -1,6 +1,6 @@
 __author__ = 'bj'
 
-import xml.etree.ElementTree as element
+import xml.etree.ElementTree as ET
 from pysimplesoap.client import SoapClient
 
 
@@ -20,18 +20,32 @@ def get_uk_location_by_postcode(county):
     return ta
 
 
+def get_file_as_string(filename):
+    str_data = ""
+    with open(filename, 'r') as f:
+        for x in f.readlines():
+            str_data += x
+    return str_data
+
+
 def test_soap_call(soap_call, expected_response, *args):
-    """Test a SOAP call function
+    """Test a SOAP call function by comparing the response to a string.
+    Actual XML Element Tree comparison is difficult, so I have parsed both the fresh response and recorded response
+    using an XML parser known to maintain order (Python's XParse); then compared the rendered output of each.
     :param soap_call type:function
-    :param expected_response type:ElementTree
+    :param expected_response type:str
     :param args type:[str]
     """
-    tree = element.fromstring(expected_response)
-    assert element.fromstring(soap_call(*args)) == tree
+    expected_et = ET.fromstring(expected_response)
+    response_et = ET.fromstring(soap_call(*args))
+    try:
+        assert ET.dump(response_et) == ET.dump(expected_et)
+    except AssertionError:
+        print("Given string does not form a matching XML element tree! FAIL")
+    else:
+        print("Given string forms a matching XML element tree. PASS")
 
 
 if __name__ == '__main__':
-
-    tree = element.parse('country_data.xml')
-    root = tree.getroot()
-    print(get_uk_location_by_postcode("cumbria"))
+    test_data = get_file_as_string('./tests/cumbria_response.xml')
+    test_soap_call(get_uk_location_by_postcode, test_data, 'Cumbria')
