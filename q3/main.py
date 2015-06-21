@@ -1,5 +1,6 @@
 __author__ = 'bj'
 
+import xml.etree.ElementTree as element
 from pysimplesoap.client import SoapClient
 
 
@@ -19,14 +20,18 @@ def get_uk_location_by_postcode(county):
     return ta
 
 
-def test_soap_call(soap_call, expected_response, params=None):
-    assert soap_call(params) == expected_response
+def test_soap_call(soap_call, expected_response, *args):
+    """Test a SOAP call function
+    :param soap_call type:function
+    :param expected_response type:ElementTree
+    :param args type:[str]
+    """
+    tree = element.fromstring(expected_response)
+    assert element.fromstring(soap_call(*args)) == tree
 
 
 if __name__ == '__main__':
-    import xml.etree.ElementTree as ET
 
-
-    tree = ET.parse('country_data.xml')
+    tree = element.parse('country_data.xml')
     root = tree.getroot()
     print(get_uk_location_by_postcode("cumbria"))
