@@ -1,18 +1,16 @@
 <NewDataSet>
   <Table>
+    <County>Cumbria</County>
     <Town>Cliburn</Town>
-    <County>Cumbria</County>
-    <PostCode>CA10</PostCode>
-  </Table>
-  <Table>
-    <Town>Clifton</Town>
-    <County>Cumbria</County>
     <PostCode>CA10</PostCode>
   </Table>
   <Table>
     <Town>Clough</Town>
     <County>Cumbria</County>
     <PostCode>LA10</PostCode>
+  </Table>
+  <Table>
+    <Town>Clifton</Town><County>Cumbria</County><PostCode>CA10</PostCode>
   </Table>
   <Table>
     <Town>Cockermouth</Town>

@@ -8,4 +8,6 @@ This can be run using 'python -m nose' from the q1/tests directory, or using the
 
 This can be run using 'behave' from within the features directory, or using the test runner in PyCharm.
 
-*Q3)* Javascript / HTML5 - So I could demo on my phone - perhaps using Grail / AngularJS
+*Q3)* Developed in python using pySimpleSoap to set up my client. 
+
+To compare the XML response with a test string, I created a simple ordered serialiser.  

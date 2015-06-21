@@ -26,6 +26,87 @@ def get_file_as_string(filename):
     return str_data
 
 
+def compare_element_trees(a, b):
+    """
+    Walk the entire XML element tree, in alphabetical order to elements, tags, text and tails, comparing every node.
+    :param a: ElementTree
+    :param b: ElementTree
+    :return: bool
+    """
+
+    if a.tag != b.tag:
+        return False
+
+    if (a.text and b.text) and (a.text != b.text):
+            return False
+    elif b.text:
+        return False
+
+    if (a.tail and b.tail) and (a.tail != b.tail):
+            return False
+    elif b.tail:
+        return False
+
+    # Attributes are retirieved as a list of (name, value) pairs.
+    if sorted(a.items()) != sorted(b.items()):
+        return False
+
+
+def xml_compare(x1, x2, reporter=None):
+    if x1.tag != x2.tag:
+        if reporter:
+            reporter('Tags do not match: %s and %s' % (x1.tag, x2.tag))
+        return False
+    for name, value in x1.attrib.items():
+        if x2.attrib.get(name) != value:
+            if reporter:
+                reporter('Attributes do not match: %s=%r, %s=%r'
+                         % (name, value, name, x2.attrib.get(name)))
+            return False
+    for name in x2.attrib.keys():
+        if name not in x1.attrib:
+            if reporter:
+                reporter('x2 has an attribute x1 is missing: %s'
+                         % name)
+            return False
+    if not text_compare(x1.text, x2.text):
+        if reporter:
+            reporter('text: %r != %r' % (x1.text, x2.text))
+        return False
+    if not text_compare(x1.tail, x2.tail):
+        if reporter:
+            reporter('tail: %r != %r' % (x1.tail, x2.tail))
+        return False
+
+    cl1 = x1.getchildren()
+    cl2 = x2.getchildren()
+
+    if len(cl1) != len(cl2):
+        if reporter:
+            reporter('children length differs, %i != %i'
+                     % (len(cl1), len(cl2)))
+        return False
+
+    i = 0
+    for c1, c2 in zip(cl1, cl2):
+        i += 1
+        if not xml_compare(c1, c2, reporter=reporter):
+            if reporter:
+                reporter('children %i do not match: %s'
+                         % (i, c1.tag))
+            return False
+
+    return True
+
+
+def text_compare(t1, t2):
+    if not t1 and not t2:
+        return True
+    if t1 == '*' or t2 == '*':
+        return True
+    return (t1 or '').strip() == (t2 or '').strip()
+
+
 def test_soap_call(soap_call, expected_response, *args):
     """Test a SOAP call function by comparing the response to a string.
     Actual XML Element Tree comparison is difficult, so I have parsed both the fresh response and recorded response
@@ -35,13 +116,12 @@ def test_soap_call(soap_call, expected_response, *args):
     :param args type:[str]
     """
     expected_et = ET.fromstring(expected_response)
-    response_et = ET.fromstring(soap_call(*args))
-    try:
-        assert ET.dump(response_et) == ET.dump(expected_et)
-    except AssertionError:
-        print("Given string does not form a matching XML element tree! FAIL")
-    else:
+    actual_et = ET.fromstring(soap_call(*args))
+    if xml_compare(expected_et, actual_et, reporter=print):
         print("Given string forms a matching XML element tree. PASS")
+    else:
+        print("Given string does not form a matching XML element tree! FAIL")
+        print(ET.tostring(actual_et), "\n", ET.tostring(expected_et))
 
 
 if __name__ == '__main__':
