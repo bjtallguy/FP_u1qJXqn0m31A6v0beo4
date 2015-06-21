@@ -15,9 +15,7 @@ def get_uk_location_by_postcode(county):
         open("response.xml", "w").write(client.xml_response)
         raise
 
-    # extract the result:
-    ta = results['GetUKLocationByCountyResult']  # .encode("utf-8")
-    return ta
+    return results['GetUKLocationByCountyResult']
 
 
 def get_file_as_string(filename):
