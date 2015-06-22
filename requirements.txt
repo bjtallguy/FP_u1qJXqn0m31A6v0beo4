@@ -13,6 +13,7 @@ pbr==1.1.1
 PySimpleSOAP==1.16
 python-mimeparse==0.1.4
 python-subunit==1.1.0
+pyxmldiff==0.1.1
 selenium==2.46.0
 six==1.9.0
 soap2py==1.16
